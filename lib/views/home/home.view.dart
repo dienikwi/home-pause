@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_pause/views/login/login.view.dart';
 import 'package:home_pause/views/cadastro/cadastro.view.dart';
 
 class HomeView extends StatelessWidget {
@@ -45,7 +46,10 @@ class HomeView extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Ação para o botão de login
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginView()));
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(300, 45),

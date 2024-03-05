@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
-import 'package:home_pause/views/login/login.view.dart';
+import 'package:home_pause/views/cadastro/cadastro.view.dart';
 
-class CadastroView extends StatelessWidget {
-  const CadastroView({super.key});
+class LoginView extends StatelessWidget {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +24,10 @@ class CadastroView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text(
-                "Faça seu cadastro",
+                "Faça seu login",
                 style: TextStyle(fontSize: 25),
               ),
               const SizedBox(height: 30),
-              const CustomTextField(
-                labelText: 'Nome',
-                prefixIcon: Icons.person,
-              ),
-              const SizedBox(height: 20),
               const CustomTextField(
                 labelText: 'Email',
                 prefixIcon: Icons.email,
@@ -43,16 +38,10 @@ class CadastroView extends StatelessWidget {
                 prefixIcon: Icons.lock,
                 isObscure: true,
               ),
-              const SizedBox(height: 20),
-              const CustomTextField(
-                labelText: 'Confirmar senha',
-                prefixIcon: Icons.lock,
-                isObscure: true,
-              ),
               const SizedBox(height: 35),
               ElevatedButton(
                 onPressed: () {
-                  // Realizar cadastro do usuário
+                  // Fazer login
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF9399F9),
@@ -60,36 +49,32 @@ class CadastroView extends StatelessWidget {
                 child: const SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'Cadastrar',
+                    'Entrar',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ),
               const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Já possui cadastro?  ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
-                  ),
-                  InkWell(
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const Text(
+                  'Não possui cadastro?  ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+                InkWell(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LoginView()));
+                              builder: (context) => const CadastroView()));
                     },
                     child: const Text(
-                      'Login',
+                      'Cadastre-se',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Color(0xFF9399F9), fontSize: 15),
-                    ),
-                  ),
-                ],
-              ),
+                    )),
+              ]),
             ],
           ),
         ),
