@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
 import 'package:home_pause/views/cadastro/cadastro.view.dart';
+import 'package:home_pause/views/principal/principal.view.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -41,7 +42,11 @@ class LoginView extends StatelessWidget {
               const SizedBox(height: 35),
               ElevatedButton(
                 onPressed: () {
-                  // Fazer login
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PrincipalView()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF9399F9),
