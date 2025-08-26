@@ -1,99 +1,204 @@
 import 'package:flutter/material.dart';
+import 'package:home_pause/core/constants/app_assets.dart';
+import 'package:home_pause/core/constants/app_dimensions.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
+import 'package:home_pause/core/constants/app_text_styles.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/core/utils/extensions.dart';
+import 'package:home_pause/core/utils/validators.dart';
+import 'package:home_pause/shared/widgets/custom_button.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
-import 'package:home_pause/views/login/login.view.dart';
 
-class CadastroView extends StatelessWidget {
+class CadastroView extends StatefulWidget {
   const CadastroView({super.key});
+
+  @override
+  State<CadastroView> createState() => _CadastroViewState();
+}
+
+class _CadastroViewState extends State<CadastroView> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Image.asset(
-                  'assets/logo.png',
-                  width: 100,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Faça seu cadastro",
-                style: TextStyle(fontSize: 25),
-              ),
-              const SizedBox(height: 30),
-              const CustomTextField(
-                labelText: 'Nome',
-                prefixIcon: Icons.person,
-              ),
-              const SizedBox(height: 20),
-              const CustomTextField(
-                labelText: 'Email',
-                prefixIcon: Icons.email,
-              ),
-              const SizedBox(height: 20),
-              const CustomTextField(
-                labelText: 'Senha',
-                prefixIcon: Icons.lock,
-                isObscure: true,
-              ),
-              const SizedBox(height: 20),
-              const CustomTextField(
-                labelText: 'Confirmar senha',
-                prefixIcon: Icons.lock,
-                isObscure: true,
-              ),
-              const SizedBox(height: 35),
-              ElevatedButton(
-                onPressed: () {
-                  // Realizar cadastro do usuário
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF9399F9),
-                ),
-                child: const SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Cadastrar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Row(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Já possui cadastro?  ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginView()));
-                    },
-                    child: const Text(
-                      'Login',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Color(0xFF9399F9), fontSize: 15),
-                    ),
-                  ),
+                  _buildLogoSection(),
+                  const SizedBox(height: AppDimensions.spacingLarge),
+                  _buildTitleSection(),
+                  const SizedBox(height: AppDimensions.spacingExtraLarge),
+                  _buildFormSection(),
+                  const SizedBox(height: AppDimensions.spacingExtraLarge),
+                  _buildRegisterButton(),
+                  const SizedBox(height: AppDimensions.spacingMedium),
+                  _buildLoginLink(),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildLogoSection() {
+    return Center(
+      child: Image.asset(
+        AppAssets.logo,
+        width: AppDimensions.imageSmall,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildTitleSection() {
+    return const Text(
+      AppStrings.registerTitle,
+      style: AppTextStyles.titleMedium,
+    );
+  }
+
+  Widget _buildFormSection() {
+    return Column(
+      children: [
+        CustomTextField(
+          labelText: AppStrings.nameLabel,
+          prefixIcon: Icons.person,
+          controller: _nameController,
+          keyboardType: TextInputType.name,
+          validator: _validateName,
+        ),
+        const SizedBox(height: AppDimensions.spacingLarge),
+        CustomTextField(
+          labelText: AppStrings.emailLabel,
+          prefixIcon: Icons.email,
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          validator: _validateEmail,
+        ),
+        const SizedBox(height: AppDimensions.spacingLarge),
+        CustomTextField(
+          labelText: AppStrings.passwordLabel,
+          prefixIcon: Icons.lock,
+          controller: _passwordController,
+          isObscure: true,
+          validator: _validatePassword,
+        ),
+        const SizedBox(height: AppDimensions.spacingLarge),
+        CustomTextField(
+          labelText: AppStrings.confirmPasswordLabel,
+          prefixIcon: Icons.lock,
+          controller: _confirmPasswordController,
+          isObscure: true,
+          validator: _validateConfirmPassword,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRegisterButton() {
+    return CustomPrimaryButton(
+      text: AppStrings.registerActionButton,
+      onPressed: _isLoading ? null : _handleRegister,
+      isLoading: _isLoading,
+    );
+  }
+
+  Widget _buildLoginLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          AppStrings.hasAccountQuestion,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.greyText,
+        ),
+        GestureDetector(
+          onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.login),
+          child: const Text(
+            AppStrings.loginLink,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.linkText,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String? _validateName(String? value) {
+    return AppValidators.name(value);
+  }
+
+  String? _validateEmail(String? value) {
+    return AppValidators.email(value);
+  }
+
+  String? _validatePassword(String? value) {
+    return AppValidators.password(value);
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    return AppValidators.confirmPassword(value, _passwordController.text);
+  }
+
+  Future<void> _handleRegister() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // TODO: Implementar lógica de cadastro
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (mounted) {
+        context.showSuccessSnackBar('Cadastro realizado com sucesso!');
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    } catch (e) {
+      if (mounted) {
+        context
+            .showErrorSnackBar('Erro ao realizar cadastro. Tente novamente.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

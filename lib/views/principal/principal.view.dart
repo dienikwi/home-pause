@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:home_pause/core/constants/app_assets.dart';
+import 'package:home_pause/core/constants/app_colors.dart';
+import 'package:home_pause/core/constants/app_dimensions.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
+import 'package:home_pause/core/constants/app_text_styles.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/shared/widgets/custom_card.dart';
 import 'package:home_pause/views/components/bottom_nav_bar.dart';
-import 'package:home_pause/views/principal/beneficios.view.dart';
 
 class PrincipalView extends StatelessWidget {
   const PrincipalView({super.key});
@@ -8,119 +14,119 @@ class PrincipalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            const Text(
-              "Olá, Fulano",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF9399F9),
-              ),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              "Vamos se exercitar?",
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-            const SizedBox(height: 40),
-            Center(
-              child: Image.asset(
-                'assets/mulher_escritorio.png',
-                width: 350,
-              ),
-            ),
-            const SizedBox(height: 40),
-            _buildCard(
-              title: "Exercícios de ginástica laboral",
-              description: "Vamos iniciar seus exercícios diários?",
-              color: const Color(0xFF9399F9),
-              textColor: Colors.white,
-              iconColor: Colors.white,
-              onTap: () {},
-            ),
-            const SizedBox(height: 20),
-            _buildCard(
-              title: "Benefícios de praticar ginástica laboral",
-              description:
-                  "Você sabia que praticar ginástica laboral todos os dias traz muitos benefícios para sua mente e corpo?",
-              color: const Color(0xFFF5F5F5),
-              textColor: Colors.black,
-              iconColor: const Color(0xFF9399F9),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const BeneficiosView()),
-                );
-              },
-            ),
-          ],
+      backgroundColor: AppColors.surfaceWhite,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppDimensions.spacingHuge),
+              _buildGreetingSection(),
+              const SizedBox(height: AppDimensions.spacingExtraLarge),
+              _buildImageSection(),
+              const SizedBox(height: AppDimensions.spacingExtraLarge),
+              _buildExerciseCard(context),
+              const SizedBox(height: AppDimensions.spacingLarge),
+              _buildBenefitsCard(context),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: 0,
-        onTap: (index) {
-          // Lógica de navegação baseada no índice
-        },
+        onTap: (index) => _handleBottomNavTap(context, index),
       ),
     );
   }
 
-  Widget _buildCard({
-    required String title,
-    required String description,
-    required Color color,
-    required Color textColor,
-    required Color iconColor,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(30),
+  Widget _buildGreetingSection() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.greetingDefault,
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    description,
-                    style: TextStyle(
-                        fontSize: 14, color: textColor.withOpacity(0.7)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 15),
-            Icon(
-              Icons.arrow_circle_right,
-              color: iconColor,
-              size: 60,
-            ),
-          ],
+        SizedBox(height: AppDimensions.spacingTiny),
+        Text(
+          AppStrings.exerciseQuestion,
+          style: AppTextStyles.subtitle,
         ),
+      ],
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Center(
+      child: Image.asset(
+        AppAssets.officeWoman,
+        width: AppDimensions.imageExtraLarge,
+        fit: BoxFit.contain,
       ),
     );
+  }
+
+  Widget _buildExerciseCard(BuildContext context) {
+    return CustomCard(
+      title: AppStrings.exerciseCardTitle,
+      description: AppStrings.exerciseCardDescription,
+      backgroundColor: AppColors.primary,
+      textColor: AppColors.textLight,
+      iconColor: AppColors.textLight,
+      onTap: () => _handleExerciseCardTap(context),
+    );
+  }
+
+  Widget _buildBenefitsCard(BuildContext context) {
+    return CustomCard(
+      title: AppStrings.benefitsCardTitle,
+      description: AppStrings.benefitsCardDescription,
+      backgroundColor: AppColors.cardBackground,
+      textColor: AppColors.textPrimary,
+      iconColor: AppColors.primary,
+      onTap: () => _handleBenefitsCardTap(context),
+    );
+  }
+
+  void _handleExerciseCardTap(BuildContext context) {
+    // TODO: Implementar navegação para tela de exercícios
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Funcionalidade de exercícios em desenvolvimento'),
+      ),
+    );
+  }
+
+  void _handleBenefitsCardTap(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.benefits);
+  }
+
+  void _handleBottomNavTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        // Já estamos na tela principal
+        break;
+      case 1:
+        // TODO: Implementar navegação para tela de histórico
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Funcionalidade de histórico em desenvolvimento'),
+          ),
+        );
+        break;
+      case 2:
+        // TODO: Implementar navegação para tela de perfil
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Funcionalidade de perfil em desenvolvimento'),
+          ),
+        );
+        break;
+    }
   }
 }

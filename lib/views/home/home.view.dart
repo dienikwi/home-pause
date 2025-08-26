@@ -1,86 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:home_pause/views/login/login.view.dart';
-import 'package:home_pause/views/cadastro/cadastro.view.dart';
+import 'package:home_pause/core/constants/app_assets.dart';
+import 'package:home_pause/core/constants/app_dimensions.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
+import 'package:home_pause/core/constants/app_text_styles.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/shared/widgets/custom_button.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle titulo = TextStyle(fontSize: 35);
-    const TextStyle subtitulo = TextStyle(fontSize: 18, color: Colors.grey);
-    const TextStyle descricao = TextStyle(fontSize: 13, color: Colors.grey);
-
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Bem-vindo",
-                  style: titulo,
-                ),
-                Text(
-                  "Vamos começar?",
-                  style: subtitulo,
-                ),
+                _buildWelcomeSection(),
+                const SizedBox(height: AppDimensions.spacingHuge),
+                _buildImageSection(),
+                const SizedBox(height: AppDimensions.spacingHuge),
+                _buildActionSection(context),
               ],
             ),
-            const SizedBox(height: 50),
-            Image.asset(
-              'assets/mulher_tela_inicial.png',
-              width: 320,
-            ),
-            const SizedBox(height: 50),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Escolha uma opção para iniciar',
-                  style: descricao,
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginView()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 45),
-                    backgroundColor: const Color(0xFF9399F9),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CadastroView()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 45),
-                  ),
-                  child: const Text(
-                    'Cadastro',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildWelcomeSection() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppStrings.welcomeTitle,
+          style: AppTextStyles.titleLarge,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: AppDimensions.spacingSmall),
+        Text(
+          AppStrings.welcomeSubtitle,
+          style: AppTextStyles.subtitle,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Image.asset(
+      AppAssets.welcomeWoman,
+      width: AppDimensions.imageLarge,
+      fit: BoxFit.contain,
+    );
+  }
+
+  Widget _buildActionSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          AppStrings.chooseOptionDescription,
+          style: AppTextStyles.bodySmall,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: AppDimensions.spacingLarge),
+        CustomPrimaryButton(
+          text: AppStrings.loginButton,
+          onPressed: () => _navigateToLogin(context),
+        ),
+        const SizedBox(height: AppDimensions.spacingMedium),
+        CustomSecondaryButton(
+          text: AppStrings.registerButton,
+          onPressed: () => _navigateToRegister(context),
+        ),
+      ],
+    );
+  }
+
+  void _navigateToLogin(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.login);
+  }
+
+  void _navigateToRegister(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.register);
   }
 }

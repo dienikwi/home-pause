@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home_pause/views/principal/principal.view.dart';
+import 'package:home_pause/core/constants/app_colors.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -14,44 +15,25 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: currentIndex,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.textSecondary,
+      onTap: onTap,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.house_rounded),
-          label: 'Inicio',
+          label: AppStrings.homeTab,
         ),
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.stars,
-          ),
-          label: 'Pontuação',
+          icon: Icon(Icons.stars),
+          label: AppStrings.scoreTab,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Perfil',
+          label: AppStrings.profileTab,
         ),
       ],
-      currentIndex: currentIndex,
-      selectedItemColor: const Color(0xFF9399F9),
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PrincipalView()),
-          );
-        } else if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PrincipalView()),
-          );
-        } else if (index == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PrincipalView()),
-          );
-        } else {
-          onTap(index);
-        }
-      },
     );
   }
 }

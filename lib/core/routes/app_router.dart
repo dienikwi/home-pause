@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/views/home/home.view.dart';
+import 'package:home_pause/views/login/login.view.dart';
+import 'package:home_pause/views/cadastro/cadastro.view.dart';
+import 'package:home_pause/views/principal/principal.view.dart';
+import 'package:home_pause/views/principal/beneficios.view.dart';
+
+class AppRouter {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AppRoutes.home:
+        return MaterialPageRoute(
+          builder: (_) => const HomeView(),
+          settings: settings,
+        );
+      case AppRoutes.login:
+        return MaterialPageRoute(
+          builder: (_) => const LoginView(),
+          settings: settings,
+        );
+      case AppRoutes.register:
+        return MaterialPageRoute(
+          builder: (_) => const CadastroView(),
+          settings: settings,
+        );
+      case AppRoutes.main:
+        return MaterialPageRoute(
+          builder: (_) => const PrincipalView(),
+          settings: settings,
+        );
+      case AppRoutes.benefits:
+        return MaterialPageRoute(
+          builder: (_) => const BeneficiosView(),
+          settings: settings,
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(
+              child: Text('Página não encontrada'),
+            ),
+          ),
+        );
+    }
+  }
+}

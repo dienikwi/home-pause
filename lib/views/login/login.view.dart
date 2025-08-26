@@ -1,89 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:home_pause/core/constants/app_assets.dart';
+import 'package:home_pause/core/constants/app_dimensions.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
+import 'package:home_pause/core/constants/app_text_styles.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/core/utils/extensions.dart';
+import 'package:home_pause/core/utils/validators.dart';
+import 'package:home_pause/shared/widgets/custom_button.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
-import 'package:home_pause/views/cadastro/cadastro.view.dart';
-import 'package:home_pause/views/principal/principal.view.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Image.asset(
-                  'assets/logo.png',
-                  width: 100,
-                ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLogoSection(),
+                  const SizedBox(height: AppDimensions.spacingLarge),
+                  _buildTitleSection(),
+                  const SizedBox(height: AppDimensions.spacingExtraLarge),
+                  _buildFormSection(),
+                  const SizedBox(height: AppDimensions.spacingExtraLarge),
+                  _buildLoginButton(),
+                  const SizedBox(height: AppDimensions.spacingMedium),
+                  _buildRegisterLink(),
+                ],
               ),
-              const SizedBox(height: 20),
-              const Text(
-                "Faça seu login",
-                style: TextStyle(fontSize: 25),
-              ),
-              const SizedBox(height: 30),
-              const CustomTextField(
-                labelText: 'Email',
-                prefixIcon: Icons.email,
-              ),
-              const SizedBox(height: 20),
-              const CustomTextField(
-                labelText: 'Senha',
-                prefixIcon: Icons.lock,
-                isObscure: true,
-              ),
-              const SizedBox(height: 35),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PrincipalView()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF9399F9),
-                ),
-                child: const SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Entrar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text(
-                  'Não possui cadastro?  ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CadastroView()));
-                    },
-                    child: const Text(
-                      'Cadastre-se',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Color(0xFF9399F9), fontSize: 15),
-                    )),
-              ]),
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildLogoSection() {
+    return Center(
+      child: Image.asset(
+        AppAssets.logo,
+        width: AppDimensions.imageSmall,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildTitleSection() {
+    return const Text(
+      AppStrings.loginTitle,
+      style: AppTextStyles.titleMedium,
+    );
+  }
+
+  Widget _buildFormSection() {
+    return Column(
+      children: [
+        CustomTextField(
+          labelText: AppStrings.emailLabel,
+          prefixIcon: Icons.email,
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          validator: _validateEmail,
+        ),
+        const SizedBox(height: AppDimensions.spacingLarge),
+        CustomTextField(
+          labelText: AppStrings.passwordLabel,
+          prefixIcon: Icons.lock,
+          controller: _passwordController,
+          isObscure: true,
+          validator: _validatePassword,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return CustomPrimaryButton(
+      text: AppStrings.enterButton,
+      onPressed: _isLoading ? null : _handleLogin,
+      isLoading: _isLoading,
+    );
+  }
+
+  Widget _buildRegisterLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          AppStrings.noAccountQuestion,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.greyText,
+        ),
+        GestureDetector(
+          onTap: () =>
+              Navigator.pushReplacementNamed(context, AppRoutes.register),
+          child: const Text(
+            AppStrings.registerLink,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.linkText,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String? _validateEmail(String? value) {
+    return AppValidators.email(value);
+  }
+
+  String? _validatePassword(String? value) {
+    return AppValidators.password(value);
+  }
+
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // TODO: Implementar lógica de autenticação
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.main);
+      }
+    } catch (e) {
+      if (mounted) {
+        context.showErrorSnackBar('Erro ao fazer login. Tente novamente.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

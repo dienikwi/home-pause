@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:home_pause/core/constants/app_strings.dart';
+import 'package:home_pause/core/routes/app_router.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
 import 'package:home_pause/themes/light.theme.dart';
-import 'package:home_pause/views/home/home.view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(const Root());
+  runApp(const HomePauseApp());
 }
 
-class Root extends StatelessWidget {
-  const Root({super.key});
+class HomePauseApp extends StatelessWidget {
+  const HomePauseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Home Pause',
+      title: AppStrings.appTitle,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: lightTheme,
-      home: const HomeView(),
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }

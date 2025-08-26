@@ -43,8 +43,8 @@ class BeneficiosView extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Center(
-              child: const Text(
-                "Benefícios",
+              child: Text(
+                'Benefícios',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

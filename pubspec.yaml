@@ -11,10 +11,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # UI
   google_fonts: ^5.0.0
   font_awesome_flutter: ^10.0.0
   cupertino_icons: ^1.0.6
+
+  # Network
   http: ^1.1.0
+
+  # Storage
   shared_preferences: ^2.0.0
 
 dev_dependencies:
@@ -22,7 +28,16 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
 
+  # Code quality tools
+  import_sorter: ^4.6.0
+
 flutter:
   assets:
     - assets/
   uses-material-design: true
+
+# Configuração do import_sorter para organizar imports
+import_sorter:
+  comments: false
+  ignored_files:
+    - \/lib\/.*\.g\.dart$
