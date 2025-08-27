@@ -7,6 +7,7 @@ ThemeData lightTheme = ThemeData(
   textTheme: GoogleFonts.manropeTextTheme(),
   primaryColor: AppColors.primary,
   brightness: Brightness.light,
+  fontFamily: GoogleFonts.manrope().fontFamily,
   colorScheme: const ColorScheme.light(
     surface: AppColors.background,
     primary: AppColors.primary,
@@ -17,21 +18,27 @@ ThemeData lightTheme = ThemeData(
     onSurface: AppColors.textPrimary,
   ),
   inputDecorationTheme: InputDecorationTheme(
-    labelStyle: const TextStyle(
+    labelStyle: GoogleFonts.manrope(
       color: AppColors.textSecondary,
     ),
-    hintStyle: const TextStyle(
+    hintStyle: GoogleFonts.manrope(
       color: AppColors.textSecondary,
     ),
     fillColor: AppColors.textFieldBackground,
     filled: true,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-      borderSide: BorderSide.none,
+      borderSide: const BorderSide(
+        color: AppColors.textSecondary,
+        width: 1.0,
+      ),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-      borderSide: BorderSide.none,
+      borderSide: const BorderSide(
+        color: AppColors.textSecondary,
+        width: 1.0,
+      ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),

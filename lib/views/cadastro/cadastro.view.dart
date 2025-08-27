@@ -6,6 +6,7 @@ import 'package:home_pause/core/constants/app_text_styles.dart';
 import 'package:home_pause/core/routes/app_routes.dart';
 import 'package:home_pause/core/utils/extensions.dart';
 import 'package:home_pause/core/utils/validators.dart';
+import 'package:home_pause/data/services/auth_service.dart';
 import 'package:home_pause/shared/widgets/custom_button.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
 
@@ -22,6 +23,7 @@ class _CadastroViewState extends State<CadastroView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _authService = AuthService();
   bool _isLoading = false;
 
   @override
@@ -84,7 +86,7 @@ class _CadastroViewState extends State<CadastroView> {
   }
 
   Widget _buildTitleSection() {
-    return const Text(
+    return Text(
       AppStrings.registerTitle,
       style: AppTextStyles.titleMedium,
     );
@@ -140,14 +142,14 @@ class _CadastroViewState extends State<CadastroView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           AppStrings.hasAccountQuestion,
           textAlign: TextAlign.center,
           style: AppTextStyles.greyText,
         ),
         GestureDetector(
           onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.login),
-          child: const Text(
+          child: Text(
             AppStrings.loginLink,
             textAlign: TextAlign.center,
             style: AppTextStyles.linkText,
@@ -181,17 +183,23 @@ class _CadastroViewState extends State<CadastroView> {
     });
 
     try {
-      // TODO: Implementar lógica de cadastro
-      await Future.delayed(const Duration(seconds: 2));
+      final userModel = await _authService.createAccount(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        nome: _nameController.text.trim(),
+      );
 
-      if (mounted) {
+      if (mounted && userModel != null) {
         context.showSuccessSnackBar('Cadastro realizado com sucesso!');
         Navigator.pushReplacementNamed(context, AppRoutes.login);
+      } else {
+        if (mounted) {
+          context.showErrorSnackBar('Erro: Dados do usuário não foram criados');
+        }
       }
     } catch (e) {
       if (mounted) {
-        context
-            .showErrorSnackBar('Erro ao realizar cadastro. Tente novamente.');
+        context.showErrorSnackBar(e.toString());
       }
     } finally {
       if (mounted) {

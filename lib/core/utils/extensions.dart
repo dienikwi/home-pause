@@ -56,7 +56,10 @@ extension StringExtensions on String {
 
   String get capitalizeWords {
     if (isEmpty) return this;
-    return split(' ').map((word) => word.capitalize).join(' ');
+    return removeExtraSpaces
+        .split(' ')
+        .map((word) => word.capitalize)
+        .join(' ');
   }
 
   String get removeExtraSpaces {

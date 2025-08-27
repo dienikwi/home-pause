@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "741291084734",
+    "project_id": "home-pause-dk",
+    "storage_bucket": "home-pause-dk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741291084734:android:b727529a70bb6355e847ef",
+        "android_client_info": {
+          "package_name": "com.example.home_pause"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApYLDkEDSPpiNPxRmBYBCRGfVjCqAkwq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741291084734:android:d2dd174d9a14f24be847ef",
+        "android_client_info": {
+          "package_name": "com.homepaude.dienifer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApYLDkEDSPpiNPxRmBYBCRGfVjCqAkwq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

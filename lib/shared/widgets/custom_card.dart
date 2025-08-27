@@ -3,7 +3,6 @@ import 'package:home_pause/core/constants/app_colors.dart';
 import 'package:home_pause/core/constants/app_dimensions.dart';
 import 'package:home_pause/core/constants/app_text_styles.dart';
 
-/// Card customizado para exibir informações com ação
 class CustomCard extends StatelessWidget {
   final String title;
   final String description;

@@ -4,13 +4,56 @@ import 'package:home_pause/core/constants/app_dimensions.dart';
 import 'package:home_pause/core/constants/app_strings.dart';
 import 'package:home_pause/core/constants/app_text_styles.dart';
 import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/data/services/session_service.dart';
 import 'package:home_pause/shared/widgets/custom_button.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  bool _isChecking = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserSession();
+  }
+
+  Future<void> _checkUserSession() async {
+    try {
+      final isLoggedIn = await SessionService.isUserLoggedIn();
+      if (mounted) {
+        if (isLoggedIn) {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.main);
+        } else {
+          setState(() {
+            _isChecking = false;
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isChecking = false;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isChecking) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -34,7 +77,7 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildWelcomeSection() {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
@@ -42,10 +85,16 @@ class HomeView extends StatelessWidget {
           style: AppTextStyles.titleLarge,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: AppDimensions.spacingSmall),
+        const SizedBox(height: AppDimensions.spacingSmall),
         Text(
           AppStrings.welcomeSubtitle,
           style: AppTextStyles.subtitle,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: AppDimensions.spacingMedium),
+        Text(
+          AppStrings.chooseOptionDescription,
+          style: AppTextStyles.bodySmall,
           textAlign: TextAlign.center,
         ),
       ],
@@ -53,41 +102,29 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
-    return Image.asset(
-      AppAssets.welcomeWoman,
-      width: AppDimensions.imageLarge,
-      fit: BoxFit.contain,
+    return Center(
+      child: Image.asset(
+        AppAssets.welcomeWoman,
+        width: AppDimensions.imageExtraLarge,
+        fit: BoxFit.contain,
+      ),
     );
   }
 
   Widget _buildActionSection(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          AppStrings.chooseOptionDescription,
-          style: AppTextStyles.bodySmall,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppDimensions.spacingLarge),
         CustomPrimaryButton(
           text: AppStrings.loginButton,
-          onPressed: () => _navigateToLogin(context),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
         ),
         const SizedBox(height: AppDimensions.spacingMedium),
         CustomSecondaryButton(
           text: AppStrings.registerButton,
-          onPressed: () => _navigateToRegister(context),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.register),
         ),
       ],
     );
-  }
-
-  void _navigateToLogin(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.login);
-  }
-
-  void _navigateToRegister(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.register);
   }
 }

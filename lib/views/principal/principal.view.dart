@@ -1,20 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:home_pause/core/constants/app_assets.dart';
 import 'package:home_pause/core/constants/app_colors.dart';
 import 'package:home_pause/core/constants/app_dimensions.dart';
 import 'package:home_pause/core/constants/app_strings.dart';
 import 'package:home_pause/core/constants/app_text_styles.dart';
 import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/data/models/user_model.dart';
+import 'package:home_pause/data/services/auth_service.dart';
 import 'package:home_pause/shared/widgets/custom_card.dart';
 import 'package:home_pause/views/components/bottom_nav_bar.dart';
 
-class PrincipalView extends StatelessWidget {
+class PrincipalView extends StatefulWidget {
   const PrincipalView({super.key});
 
   @override
+  State<PrincipalView> createState() => _PrincipalViewState();
+}
+
+class _PrincipalViewState extends State<PrincipalView> {
+  final _authService = AuthService();
+  UserModel? _currentUser;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final user = await _authService.getCurrentUserData();
+      if (mounted) {
+        setState(() {
+          _currentUser = user;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao carregar dados: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: AppColors.surfaceWhite,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.surfaceWhite,
+      appBar: AppBar(
+        backgroundColor: AppColors.surfaceWhite,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.paddingLarge),
@@ -41,18 +93,20 @@ class PrincipalView extends StatelessWidget {
   }
 
   Widget _buildGreetingSection() {
-    return const Column(
+    final userName = _currentUser?.nome ?? 'Usuário';
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.greetingDefault,
-          style: TextStyle(
+          'Olá, $userName',
+          style: GoogleFonts.manrope(
             fontSize: 25,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
         ),
-        SizedBox(height: AppDimensions.spacingTiny),
+        const SizedBox(height: AppDimensions.spacingTiny),
         Text(
           AppStrings.exerciseQuestion,
           style: AppTextStyles.subtitle,
@@ -109,7 +163,6 @@ class PrincipalView extends StatelessWidget {
   void _handleBottomNavTap(BuildContext context, int index) {
     switch (index) {
       case 0:
-        // Já estamos na tela principal
         break;
       case 1:
         // TODO: Implementar navegação para tela de histórico
@@ -120,12 +173,7 @@ class PrincipalView extends StatelessWidget {
         );
         break;
       case 2:
-        // TODO: Implementar navegação para tela de perfil
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Funcionalidade de perfil em desenvolvimento'),
-          ),
-        );
+        Navigator.pushNamed(context, AppRoutes.profile);
         break;
     }
   }

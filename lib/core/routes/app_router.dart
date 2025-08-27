@@ -5,10 +5,14 @@ import 'package:home_pause/views/login/login.view.dart';
 import 'package:home_pause/views/cadastro/cadastro.view.dart';
 import 'package:home_pause/views/principal/principal.view.dart';
 import 'package:home_pause/views/principal/beneficios.view.dart';
+import 'package:home_pause/views/perfil/perfil.view.dart';
+import 'package:home_pause/views/perfil/editar_perfil.view.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
+    final String routeName = settings.name ?? AppRoutes.home;
+
+    switch (routeName) {
       case AppRoutes.home:
         return MaterialPageRoute(
           builder: (_) => const HomeView(),
@@ -32,6 +36,16 @@ class AppRouter {
       case AppRoutes.benefits:
         return MaterialPageRoute(
           builder: (_) => const BeneficiosView(),
+          settings: settings,
+        );
+      case AppRoutes.profile:
+        return MaterialPageRoute(
+          builder: (_) => const PerfilView(),
+          settings: settings,
+        );
+      case AppRoutes.editProfile:
+        return MaterialPageRoute(
+          builder: (_) => const EditarPerfilView(),
           settings: settings,
         );
       default:

@@ -89,9 +89,7 @@ class BeneficiosView extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: 0,
-        onTap: (index) {
-          // Lógica de navegação baseada no índice
-        },
+        onTap: (index) {},
       ),
     );
   }

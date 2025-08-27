@@ -1,80 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Estilos de texto padronizados do aplicativo
 class AppTextStyles {
   AppTextStyles._();
 
-  static const TextStyle titleLarge = TextStyle(
+  static TextStyle titleLarge = GoogleFonts.manrope(
     fontSize: 35,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle titleMedium = TextStyle(
+  static TextStyle titleMedium = GoogleFonts.manrope(
     fontSize: 25,
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle titleSmall = TextStyle(
+  static TextStyle titleSmall = GoogleFonts.manrope(
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
   // Subtítulos
-  static const TextStyle subtitle = TextStyle(
+  static TextStyle subtitle = GoogleFonts.manrope(
     fontSize: 18,
     color: Colors.grey,
   );
 
-  static const TextStyle subtitleBold = TextStyle(
+  static TextStyle subtitleBold = GoogleFonts.manrope(
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
 
   // Corpo de texto
-  static const TextStyle bodyLarge = TextStyle(
+  static TextStyle bodyLarge = GoogleFonts.manrope(
     fontSize: 16,
   );
 
-  static const TextStyle bodyMedium = TextStyle(
+  static TextStyle bodyMedium = GoogleFonts.manrope(
     fontSize: 14,
   );
 
-  static const TextStyle bodySmall = TextStyle(
+  static TextStyle bodySmall = GoogleFonts.manrope(
     fontSize: 13,
     color: Colors.grey,
   );
 
   // Botões
-  static const TextStyle buttonText = TextStyle(
+  static TextStyle buttonText = GoogleFonts.manrope(
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );
 
-  static const TextStyle buttonTextWhite = TextStyle(
+  static TextStyle buttonTextWhite = GoogleFonts.manrope(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 
   // Links
-  static const TextStyle linkText = TextStyle(
+  static TextStyle linkText = GoogleFonts.manrope(
     fontSize: 15,
-    color: Color(0xFF9399F9),
+    color: const Color(0xFF9399F9),
     decoration: TextDecoration.none,
   );
 
-  static const TextStyle greyText = TextStyle(
+  static TextStyle greyText = GoogleFonts.manrope(
     fontSize: 15,
     color: Colors.grey,
   );
 
   // Cards
-  static const TextStyle cardTitle = TextStyle(
+  static TextStyle cardTitle = GoogleFonts.manrope(
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle cardDescription = TextStyle(
+  static TextStyle cardDescription = GoogleFonts.manrope(
     fontSize: 14,
   );
 }

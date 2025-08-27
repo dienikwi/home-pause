@@ -52,7 +52,7 @@ lib/
 ### Temas e Estilo
 
 - **Tema único**: Configure em `lib/themes/light_theme.dart`
-- **Google Fonts**: Use fonte padrão Roboto via `google_fonts`
+- **Google Fonts**: Use fonte padrão Manrope via `google_fonts`
 - **Cores consistentes**: Sempre referencie `AppColors` para cores
 - **Espaçamentos**: Use `AppDimensions` para padding, margin, etc.
 

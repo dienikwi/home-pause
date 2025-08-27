@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:home_pause/core/constants/app_colors.dart';
 import 'package:home_pause/core/constants/app_dimensions.dart';
 
@@ -41,69 +42,77 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.textFieldBackground,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-      ),
-      child: TextFormField(
-        controller: widget.controller,
-        validator: widget.validator,
-        keyboardType: widget.keyboardType,
-        onChanged: widget.onChanged,
-        enabled: widget.enabled,
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          hintText: widget.hintText,
-          hintStyle: const TextStyle(color: AppColors.textSecondary),
-          labelStyle: const TextStyle(color: AppColors.textSecondary),
-          prefixIcon: Icon(
-            widget.prefixIcon,
+    return TextFormField(
+      controller: widget.controller,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+      onChanged: widget.onChanged,
+      enabled: widget.enabled,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        hintStyle: GoogleFonts.manrope(color: AppColors.textSecondary),
+        labelStyle: GoogleFonts.manrope(color: AppColors.textSecondary),
+        prefixIcon: Icon(
+          widget.prefixIcon,
+          color: AppColors.textSecondary,
+        ),
+        suffixIcon: widget.isObscure
+            ? IconButton(
+                icon: Icon(
+                  _isObscured ? Icons.visibility : Icons.visibility_off,
+                  color: AppColors.textSecondary,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isObscured = !_isObscured;
+                  });
+                },
+              )
+            : null,
+        filled: true,
+        fillColor: AppColors.textFieldBackground,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          borderSide: const BorderSide(
             color: AppColors.textSecondary,
-          ),
-          suffixIcon: widget.isObscure
-              ? IconButton(
-                  icon: Icon(
-                    _isObscured ? Icons.visibility : Icons.visibility_off,
-                    color: AppColors.textSecondary,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isObscured = !_isObscured;
-                    });
-                  },
-                )
-              : null,
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-            borderSide: const BorderSide(
-              color: AppColors.primary,
-              width: 2.0,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-            borderSide: const BorderSide(
-              color: AppColors.error,
-              width: 2.0,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-            borderSide: const BorderSide(
-              color: AppColors.error,
-              width: 2.0,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.paddingLarge,
-            vertical: AppDimensions.paddingMedium,
+            width: 1.0,
           ),
         ),
-        obscureText: widget.isObscure ? _isObscured : false,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          borderSide: const BorderSide(
+            color: AppColors.textSecondary,
+            width: 1.0,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 2.0,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          borderSide: const BorderSide(
+            color: AppColors.error,
+            width: 2.0,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          borderSide: const BorderSide(
+            color: AppColors.error,
+            width: 2.0,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.paddingLarge,
+          vertical: AppDimensions.paddingMedium,
+        ),
       ),
+      obscureText: widget.isObscure ? _isObscured : false,
     );
   }
 }
