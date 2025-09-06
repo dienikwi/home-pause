@@ -12,6 +12,15 @@ service cloud.firestore {
         && validateUserData();
     }
     
+    // Regras para a coleção de benefícios
+    match /beneficio/{beneficioId} {
+      // Permite apenas leitura para usuários autenticados
+      allow read: if request.auth != null;
+      
+      // Nega escrita para usuários (benefícios são gerenciados via admin)
+      allow write: if false;
+    }
+    
     // Função para validar dados do usuário
     function validateUserData() {
       let data = request.resource.data;

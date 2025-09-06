@@ -20,22 +20,16 @@ class AuthService {
     String? userId;
 
     try {
-      print('🚀 Iniciando criação de conta para: $email');
-
       credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      print('✅ Credential criado com sucesso');
-
       if (credential.user == null) {
-        print('❌ User é null no credential');
         throw Exception('Erro ao criar usuário - user é null');
       }
 
       userId = credential.user!.uid;
-      print('✅ Usuário criado no Auth com UID: $userId');
 
       final nomeFormatado = nome.capitalizeWords;
 
@@ -43,14 +37,10 @@ class AuthService {
 
       final currentUser = _firebaseAuth.currentUser;
       if (currentUser == null || currentUser.uid != userId) {
-        print(
-            '⚠️ Usuário atual não corresponde ao criado. Tentando recarregar...');
         await _firebaseAuth.currentUser?.reload();
       }
 
       final userModel = UserModel.empty(userId, nomeFormatado);
-
-      print('📝 Dados do usuário a serem salvos: ${userModel.toMap()}');
 
       int tentativas = 0;
       const maxTentativas = 3;
@@ -59,7 +49,6 @@ class AuthService {
       while (tentativas < maxTentativas && !salvouComSucesso) {
         try {
           tentativas++;
-          print('💾 Tentativa $tentativas de salvar no Firestore...');
 
           await _firestore
               .collection('usuarios')
@@ -70,18 +59,13 @@ class AuthService {
           final doc = await _firestore.collection('usuarios').doc(userId).get();
 
           if (doc.exists && doc.data() != null) {
-            print('✅ Dados salvos e verificados no Firestore!');
-            print('📄 Dados salvos: ${doc.data()}');
             salvouComSucesso = true;
           } else {
-            print('⚠️ Documento não foi encontrado após salvamento');
             if (tentativas < maxTentativas) {
               await Future.delayed(Duration(milliseconds: 500 * tentativas));
             }
           }
         } catch (firestoreError) {
-          print(
-              '❌ Erro ao salvar no Firestore (tentativa $tentativas): $firestoreError');
           if (tentativas >= maxTentativas) {
             rethrow;
           }
@@ -96,27 +80,14 @@ class AuthService {
 
       return userModel;
     } on FirebaseAuthException catch (e) {
-      print('❌ Erro do Firebase Auth: ${e.code} - ${e.message}');
       if (credential?.user != null) {
-        try {
-          await credential!.user!.delete();
-          print('�️ Usuário removido do Auth devido ao erro');
-        } catch (deleteError) {
-          print('⚠️ Não foi possível remover usuário do Auth: $deleteError');
-        }
+        await credential!.user!.delete();
       }
-      throw _handleAuthException(e);
-    } catch (e, stackTrace) {
-      print('❌ Erro inesperado: $e');
-      print('📄 StackTrace: $stackTrace');
 
+      throw _handleAuthException(e);
+    } catch (e) {
       if (credential?.user != null) {
-        try {
-          await credential!.user!.delete();
-          print('🗑️ Usuário removido do Auth devido ao erro inesperado');
-        } catch (deleteError) {
-          print('⚠️ Não foi possível remover usuário do Auth: $deleteError');
-        }
+        await credential!.user!.delete();
       }
 
       throw Exception('Erro inesperado ao criar conta: ${e.toString()}');
@@ -204,7 +175,7 @@ class AuthService {
 
       await _firestore.collection('usuarios').doc(user.uid).update({
         'nome': nomeFormatado,
-        'dataAtualizacao': DateTime.now().toIso8601String(),
+        'data_atualizacao': Timestamp.fromDate(DateTime.now()),
       });
     } catch (e) {
       throw Exception('Erro ao atualizar nome do usuário: ${e.toString()}');
@@ -216,10 +187,8 @@ class AuthService {
       final User? user = currentUser;
       if (user == null) throw Exception('Usuário não está logado');
 
-      // Primeiro, deletar os dados do Firestore
       await _firestore.collection('usuarios').doc(user.uid).delete();
 
-      // Depois, deletar a conta do Firebase Auth
       await user.delete();
     } catch (e) {
       throw Exception('Erro ao excluir conta: ${e.toString()}');

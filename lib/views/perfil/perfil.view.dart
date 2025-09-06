@@ -268,7 +268,7 @@ class _PerfilViewState extends State<PerfilView> {
                 ),
               ),
               const SizedBox(width: AppDimensions.spacingMedium),
-              Icon(
+              const Icon(
                 Icons.stars,
                 color: AppColors.primary,
                 size: AppDimensions.iconExtraLarge,
