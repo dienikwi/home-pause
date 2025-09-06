@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:home_pause/core/constants/app_colors.dart';
 import 'package:home_pause/core/constants/app_dimensions.dart';
 import 'package:home_pause/core/constants/app_text_styles.dart';
+import 'package:home_pause/core/routes/app_routes.dart';
 import 'package:home_pause/data/models/exercicio_model.dart';
 import 'package:home_pause/data/services/exercicio_service.dart';
 import 'package:home_pause/shared/widgets/exercicio_card.dart';
@@ -20,6 +21,7 @@ class _ExerciciosViewState extends State<ExerciciosView> {
   List<ExercicioModel> _exercicios = [];
   bool _isLoading = true;
   String? _errorMessage;
+  final Set<String> _exerciciosConcluidos = {}; // IDs dos exercícios concluídos
 
   // Lista de cores para os círculos dos exercícios
   final List<Color> _circleColors = [
@@ -227,17 +229,25 @@ class _ExerciciosViewState extends State<ExerciciosView> {
       itemCount: _exercicios.length,
       itemBuilder: (context, index) {
         final exercicio = _exercicios[index];
+        final isConcluido = _exerciciosConcluidos.contains(exercicio.id);
+
         return ExercicioCard(
           exercicio: exercicio,
           circleColor: _getCircleColor(index),
-          isConcluido: false, // Por enquanto sempre false
-          onTap: () {
-            // TODO: Implementar ação do card
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Exercício: ${exercicio.nmExercicio}'),
-              ),
+          isConcluido: isConcluido,
+          onTap: () async {
+            final resultado = await Navigator.pushNamed(
+              context,
+              AppRoutes.exerciseDetail,
+              arguments: exercicio,
             );
+
+            // Se o exercício foi concluído, adiciona à lista
+            if (resultado == true) {
+              setState(() {
+                _exerciciosConcluidos.add(exercicio.id);
+              });
+            }
           },
         );
       },

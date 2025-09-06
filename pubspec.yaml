@@ -28,6 +28,9 @@ dependencies:
   # Storage
   shared_preferences: ^2.0.0
 
+  # Video player
+  youtube_player_flutter: ^9.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

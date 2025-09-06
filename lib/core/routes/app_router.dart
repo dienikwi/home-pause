@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:home_pause/core/routes/app_routes.dart';
+import 'package:home_pause/data/models/exercicio_model.dart';
 import 'package:home_pause/views/home/home.view.dart';
 import 'package:home_pause/views/login/login.view.dart';
 import 'package:home_pause/views/cadastro/cadastro.view.dart';
 import 'package:home_pause/views/principal/principal.view.dart';
 import 'package:home_pause/views/principal/beneficios.view.dart';
 import 'package:home_pause/views/principal/exercicios.view.dart';
+import 'package:home_pause/views/principal/exercicio_detalhe.view.dart';
 import 'package:home_pause/views/perfil/perfil.view.dart';
 import 'package:home_pause/views/perfil/editar_perfil.view.dart';
 
@@ -42,6 +44,12 @@ class AppRouter {
       case AppRoutes.exercises:
         return MaterialPageRoute(
           builder: (_) => const ExerciciosView(),
+          settings: settings,
+        );
+      case AppRoutes.exerciseDetail:
+        final exercicio = settings.arguments as ExercicioModel;
+        return MaterialPageRoute(
+          builder: (_) => ExercicioDetalheView(exercicio: exercicio),
           settings: settings,
         );
       case AppRoutes.profile:
