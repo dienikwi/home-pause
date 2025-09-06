@@ -9,6 +9,7 @@ import 'package:home_pause/core/utils/validators.dart';
 import 'package:home_pause/data/services/auth_service.dart';
 import 'package:home_pause/data/services/session_service.dart';
 import 'package:home_pause/shared/widgets/custom_button.dart';
+import 'package:home_pause/views/components/bottom_nav_bar.dart';
 import 'package:home_pause/views/components/text_field.component.dart';
 
 class EditarPerfilView extends StatefulWidget {
@@ -143,6 +144,26 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
     }
   }
 
+  void _handleBottomNavTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, AppRoutes.main);
+        break;
+      case 1:
+        // TODO: Implementar navegação para tela de histórico
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Funcionalidade de histórico em desenvolvimento'),
+          ),
+        );
+        break;
+      case 2:
+        // Já está na área de perfil
+        Navigator.pushReplacementNamed(context, AppRoutes.profile);
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -159,10 +180,6 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text(
           'Editar Perfil',
           style: AppTextStyles.titleMedium.copyWith(
@@ -189,6 +206,10 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 2,
+        onTap: (index) => _handleBottomNavTap(context, index),
       ),
     );
   }
@@ -240,37 +261,73 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
   Widget _buildDeleteSection() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
       decoration: BoxDecoration(
-        color: AppColors.error.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusExtraLarge),
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         border: Border.all(
-          color: AppColors.error.withValues(alpha: 0.3),
+          color: AppColors.textSecondary.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            'Zona de Perigo',
-            style: AppTextStyles.cardTitle.copyWith(
-              color: AppColors.error,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Zona de Perigo',
+                  style: AppTextStyles.subtitle.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.spacingSmall),
+                Text(
+                  'Excluir sua conta removerá permanentemente todos os seus dados.',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: AppDimensions.spacingMedium),
-          Text(
-            'Excluir sua conta removerá permanentemente todos os seus dados. Esta ação não pode ser desfeita.',
-            style: AppTextStyles.cardDescription.copyWith(
-              color: AppColors.textPrimary,
+          const SizedBox(width: AppDimensions.spacingMedium),
+          SizedBox(
+            width: 120,
+            height: 36,
+            child: ElevatedButton(
+              onPressed: _isDeleting ? null : _handleDeleteAccount,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.paddingSmall,
+                  vertical: AppDimensions.paddingSmall,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(AppDimensions.radiusSmall),
+                ),
+              ),
+              child: _isDeleting
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Text(
+                      'Excluir Conta',
+                      style: AppTextStyles.buttonText.copyWith(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
             ),
-          ),
-          const SizedBox(height: AppDimensions.spacingLarge),
-          CustomPrimaryButton(
-            text: 'Excluir Conta',
-            onPressed: _isDeleting ? null : _handleDeleteAccount,
-            isLoading: _isDeleting,
-            backgroundColor: AppColors.error,
           ),
         ],
       ),

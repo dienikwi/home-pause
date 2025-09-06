@@ -7,6 +7,7 @@ import 'package:home_pause/data/models/user_model.dart';
 import 'package:home_pause/data/services/auth_service.dart';
 import 'package:home_pause/data/services/session_service.dart';
 import 'package:home_pause/shared/widgets/custom_button.dart';
+import 'package:home_pause/views/components/bottom_nav_bar.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -63,6 +64,25 @@ class _PerfilViewState extends State<PerfilView> {
     }
   }
 
+  void _handleBottomNavTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, AppRoutes.main);
+        break;
+      case 1:
+        // TODO: Implementar navegação para tela de histórico
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Funcionalidade de histórico em desenvolvimento'),
+          ),
+        );
+        break;
+      case 2:
+        // Já está na tela de perfil
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -109,6 +129,10 @@ class _PerfilViewState extends State<PerfilView> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 2,
+        onTap: (index) => _handleBottomNavTap(context, index),
       ),
     );
   }

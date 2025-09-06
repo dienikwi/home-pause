@@ -63,10 +63,6 @@ class _PrincipalViewState extends State<PrincipalView> {
 
     return Scaffold(
       backgroundColor: AppColors.surfaceWhite,
-      appBar: AppBar(
-        backgroundColor: AppColors.surfaceWhite,
-        elevation: 0,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.paddingLarge),
