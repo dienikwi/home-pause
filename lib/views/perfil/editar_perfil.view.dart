@@ -177,17 +177,6 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
 
     return Scaffold(
       backgroundColor: AppColors.surfaceWhite,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Editar Perfil',
-          style: AppTextStyles.titleMedium.copyWith(
-            color: AppColors.textPrimary,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.paddingLarge),
@@ -196,6 +185,7 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildHeader(),
                 const SizedBox(height: AppDimensions.spacingLarge),
                 _buildEditNameSection(),
                 const SizedBox(height: AppDimensions.spacingHuge),
@@ -211,6 +201,32 @@ class _EditarPerfilViewState extends State<EditarPerfilView> {
         currentIndex: 2,
         onTap: (index) => _handleBottomNavTap(context, index),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+          tooltip: 'Voltar',
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.cardBackground,
+            foregroundColor: AppColors.textPrimary,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            'Editar Perfil',
+            style: AppTextStyles.titleMedium.copyWith(
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(width: 48),
+      ],
     );
   }
 

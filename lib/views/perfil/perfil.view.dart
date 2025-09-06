@@ -96,30 +96,13 @@ class _PerfilViewState extends State<PerfilView> {
 
     return Scaffold(
       backgroundColor: AppColors.surfaceWhite,
-      appBar: AppBar(
-        backgroundColor: AppColors.surfaceWhite,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Perfil',
-          style: AppTextStyles.titleMedium.copyWith(
-            color: AppColors.textPrimary,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _handleLogout,
-            tooltip: 'Sair',
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.paddingLarge),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildHeader(),
               const SizedBox(height: AppDimensions.spacingLarge),
               _buildUserCard(),
               const SizedBox(height: AppDimensions.spacingLarge),
@@ -134,6 +117,33 @@ class _PerfilViewState extends State<PerfilView> {
         currentIndex: 2,
         onTap: (index) => _handleBottomNavTap(context, index),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox(width: 48),
+        Expanded(
+          child: Text(
+            'Perfil',
+            style: AppTextStyles.titleMedium.copyWith(
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: _handleLogout,
+          tooltip: 'Sair',
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.cardBackground,
+            foregroundColor: AppColors.textPrimary,
+          ),
+        ),
+      ],
     );
   }
 
@@ -154,17 +164,17 @@ class _PerfilViewState extends State<PerfilView> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Row(
         children: [
-          Text(
-            userName,
-            style: AppTextStyles.cardTitle.copyWith(
-              color: AppColors.textPrimary,
+          Expanded(
+            child: Text(
+              userName,
+              style: AppTextStyles.cardTitle.copyWith(
+                color: AppColors.textPrimary,
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppDimensions.spacingLarge),
+          const SizedBox(width: AppDimensions.spacingMedium),
           CustomPrimaryButton(
             text: 'Editar',
             onPressed: () {
@@ -266,21 +276,18 @@ class _PerfilViewState extends State<PerfilView> {
             ],
           ),
           const SizedBox(height: AppDimensions.spacingLarge),
-          Center(
-            child: CustomPrimaryButton(
-              text: 'Acessar progresso',
-              onPressed: () {
-                // TODO: Implementar navegação para tela de histórico
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content:
-                        Text('Funcionalidade de histórico em desenvolvimento'),
-                  ),
-                );
-              },
-              isFullWidth: false,
-              width: 200,
-            ),
+          CustomPrimaryButton(
+            text: 'Acessar progresso',
+            onPressed: () {
+              // TODO: Implementar navegação para tela de histórico
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content:
+                      Text('Funcionalidade de histórico em desenvolvimento'),
+                ),
+              );
+            },
+            isFullWidth: true,
           ),
         ],
       ),
