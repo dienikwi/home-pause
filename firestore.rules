@@ -21,6 +21,15 @@ service cloud.firestore {
       allow write: if false;
     }
     
+    // Regras para a coleção de exercícios
+    match /exercicio/{exercicioId} {
+      // Permite apenas leitura para usuários autenticados
+      allow read: if request.auth != null;
+      
+      // Nega escrita para usuários (exercícios são gerenciados via admin)
+      allow write: if false;
+    }
+    
     // Função para validar dados do usuário
     function validateUserData() {
       let data = request.resource.data;

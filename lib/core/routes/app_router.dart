@@ -5,6 +5,7 @@ import 'package:home_pause/views/login/login.view.dart';
 import 'package:home_pause/views/cadastro/cadastro.view.dart';
 import 'package:home_pause/views/principal/principal.view.dart';
 import 'package:home_pause/views/principal/beneficios.view.dart';
+import 'package:home_pause/views/principal/exercicios.view.dart';
 import 'package:home_pause/views/perfil/perfil.view.dart';
 import 'package:home_pause/views/perfil/editar_perfil.view.dart';
 
@@ -36,6 +37,11 @@ class AppRouter {
       case AppRoutes.benefits:
         return MaterialPageRoute(
           builder: (_) => const BeneficiosView(),
+          settings: settings,
+        );
+      case AppRoutes.exercises:
+        return MaterialPageRoute(
+          builder: (_) => const ExerciciosView(),
           settings: settings,
         );
       case AppRoutes.profile:

@@ -144,12 +144,7 @@ class _PrincipalViewState extends State<PrincipalView> {
   }
 
   void _handleExerciseCardTap(BuildContext context) {
-    // TODO: Implementar navegação para tela de exercícios
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Funcionalidade de exercícios em desenvolvimento'),
-      ),
-    );
+    Navigator.pushNamed(context, AppRoutes.exercises);
   }
 
   void _handleBenefitsCardTap(BuildContext context) {
